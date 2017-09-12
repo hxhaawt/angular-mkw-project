@@ -11,6 +11,7 @@ import { StarsComponent } from './stars/stars.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { HomeComponent } from './home/home.component';
 import {RouterModule, Routes} from "@angular/router";
+import {ProductService} from "./shared/product.service";
 
 
 const routeConfig: Routes = [
@@ -19,7 +20,7 @@ const routeConfig: Routes = [
         component: HomeComponent
     },
     {
-        path: 'product/:prodTitle',
+        path: 'product/:productId',
         component: ProductDetailComponent
     }
 ]
@@ -43,7 +44,27 @@ const routeConfig: Routes = [
       BrowserModule,
       RouterModule.forRoot(routeConfig)
   ],
-  providers: [],
+  providers: [ProductService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
