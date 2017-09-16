@@ -1,3 +1,4 @@
+<!-- 商品展示区 -->
 <div class="thumbnail">
     <img src="http://placehold.it/820x230">
     <div>
@@ -12,7 +13,31 @@
         </p>
     </div>
 </div>
+
+<!-- 商品评价列表 -->
 <div class="well">
+    <!-- 是否显示评价框 -->
+    <div>
+        <button class="btn btn-success"
+        (click)='isCommentHidden = !isCommentHidden'>
+            发表评论
+        </button>
+    </div>
+    <!-- 增加评价 -->
+    <div [hidden]='isCommentHidden' >
+        <div>
+            <app-stars [(rating)]='newRating' [readonly]='false' ></app-stars>
+        </div>
+        <div>
+            <textarea [(ngModel)]='newComment' >
+
+            </textarea>
+        </div>
+        <div>
+            <button class="btn" (click)='addComment()'>提交</button>
+        </div>
+    </div>
+    <!-- 评价列表展示 -->
     <div class="row" *ngFor="let comment of comments">
         <hr>
         <div class="col-md-12">

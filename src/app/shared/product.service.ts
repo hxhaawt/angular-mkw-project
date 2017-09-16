@@ -50,12 +50,12 @@ export class ProductService {
 
     // 模拟产品评论信息
     private comments: Comment[] = [
-        new Comment(1, 1, '2017-09-22', '张三', 3, '东西不错'),
-        new Comment(2, 1, '2017-03-12', '李四', 4, '东西还行'),
-        new Comment(3, 2, '2017-07-10', '张三', 2, '东西不错'),
-        new Comment(4, 1, '2017-09-12', '王五', 5, '东西还可以'),
-        new Comment(5, 2, '2017-08-15', '赵六', 3, '东西不错'),
-        new Comment(6, 3, '2017-08-15', '赵六', 3, '东西非常好'),
+        new Comment(1, 1, '2017-09-22 10：15：50', '张三', 3, '东西不错'),
+        new Comment(2, 1, '2017-03-12 80：15：20', '李四', 4, '东西还行'),
+        new Comment(3, 2, '2017-07-10 70：15：10', '张三', 2, '东西不错'),
+        new Comment(4, 1, '2017-09-12 20：19：21', '王五', 5, '东西还可以'),
+        new Comment(5, 2, '2017-08-15 10：05：20', '赵六', 3, '东西不错'),
+        new Comment(6, 3, '2017-08-15 18：15：26', '赵六', 3, '东西非常好'),
     ];
 
     constructor() { }
@@ -66,7 +66,7 @@ export class ProductService {
 
     // 返回对应id的产品
     getProduct(id: number): Product {
-        return this.products.find( (product) => product.id == id);
+        return this.products.find( (product) => product.id === id);
     }
 
     // 返回id对应商品的所有评论信息
@@ -75,7 +75,12 @@ export class ProductService {
         return this.comments.filter( (comment: Comment) => comment.productId == id );
     }
 
+    // 返回所有的产品分类
+    getAllCategories(): string[] {
+        return ['电子产品', '硬件产品', '软件产品'];
+    }
 }
+
 
 // 单个产品类
 export class Product {
@@ -85,7 +90,7 @@ export class Product {
         public price: number,
         public rating: number,
         public desc: string,
-        public categories: Array<string>
+        public categories: Array<string>    // 产品分类
     ) {
 
     }
