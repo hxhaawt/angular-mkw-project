@@ -10,6 +10,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class SearchComponent implements OnInit {
 
+    // 这是响应式表单结构
+
     formModel: FormGroup;
     categories: string[];
 
@@ -44,7 +46,11 @@ export class SearchComponent implements OnInit {
 
     onSearch() {
        if (  this.formModel.valid ) {
+
            console.log(  this.formModel.value );
+
+           // 发射 searchEvent 流事件，定阅有这个流事件的组件会作相应的处理
+           this.productService.searchEvent.emit( this.formModel.value );
        }
     }
 

@@ -1,83 +1,76 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
+import {Http} from "@angular/http";
+import {Observable} from "rxjs/Observable";
+import 'rxjs/Rx';
 
 @Injectable()
 export class ProductService {
 
-    // 模拟产品信息
-    private products: Product[] = [
-        new Product(
-            1,
-            '第一个商品',
-            1.93, 3.4,
-            '这是一个商品描述，测试。这是一个商品描述，测试。这是一个商品描述，测试。',
-            ['电子产品', '硬件产品']),
+    searchEvent: EventEmitter<ProductSearchParams> = new EventEmitter();
 
-        new Product(
-            2,
-            '第二个商品',
-            2.95, 4.3,
-            '这是一个商品描述，测试。这是一个商品描述，测试。这是一个商品描述，测试。',
-            ['电子产品', '软件产品']),
-
-        new Product(
-            3,
-            '第三个商品',
-            3.93, 2.6,
-            '这是一个商品描述，测试。这是一个商品描述，测试。这是一个商品描述，测试。',
-            ['电子产品', '软件产品']),
-
-        new Product(
-            4,
-            '第一个商品',
-            1.93, 1.5,
-            '这是一个商品描述，测试。这是一个商品描述，测试。这是一个商品描述，测试。',
-            ['电子产品', '硬件产品']),
-
-        new Product(
-            5,
-            '第二个商品',
-            3.90, 2.4,
-            '这是一个商品描述，测试。这是一个商品描述，测试。这是一个商品描述，测试。',
-            ['电子产品', '软件产品']),
-
-        new Product(
-            6,
-            '第三个商品',
-            1.93, 3.1,
-            '这是一个商品描述，测试。这是一个商品描述，测试。这是一个商品描述，测试。',
-            ['电子产品', '硬件产品']),
-    ];
-
-    // 模拟产品评论信息
-    private comments: Comment[] = [
-        new Comment(1, 1, '2017-09-22 10：15：50', '张三', 3, '东西不错'),
-        new Comment(2, 1, '2017-03-12 80：15：20', '李四', 4, '东西还行'),
-        new Comment(3, 2, '2017-07-10 70：15：10', '张三', 2, '东西不错'),
-        new Comment(4, 1, '2017-09-12 20：19：21', '王五', 5, '东西还可以'),
-        new Comment(5, 2, '2017-08-15 10：05：20', '赵六', 3, '东西不错'),
-        new Comment(6, 3, '2017-08-15 18：15：26', '赵六', 3, '东西非常好'),
-    ];
-
-    constructor() { }
+    constructor(private http: Http) { }
     // 返回所有的产品信息
-    getProducts(): Product[] {
-        return this.products;
+    getProducts(): Observable<Product[]> {
+        return this.http.get('/api/products').map( (res) => res.json() );
     }
 
     // 返回对应id的产品
-    getProduct(id: number): Product {
-        return this.products.find( (product) => product.id === id);
+    getProduct(id: number): Observable<Product> {
+        return this.http.get('/api/products/' + id).map( (res) => res.json());
     }
 
     // 返回id对应商品的所有评论信息
-    getCommentsForProductId(id: number): Comment[] {
+    getCommentsForProductId(id: number): Observable<Comment[]> {
 
-        return this.comments.filter( (comment: Comment) => comment.productId == id );
+        return this.http.get('/api/products/' + id + '/comments').map( (res) => res.json() );
     }
 
     // 返回所有的产品分类
     getAllCategories(): string[] {
         return ['电子产品', '硬件产品', '软件产品'];
+    }
+
+    // 返回要搜索的产品
+    search(params: ProductSearchParams): Observable<Product[]> {
+
+        let str: string = '/api/products' + this.encodeParams2(params);
+        return this.http.get(str).map( (res) => res.json() );
+
+        // return this.http.get('/api/products', {search: this.encodeParams(params)})
+        //     .map( (res) => res.json() );
+    }
+
+    // 返回正确的 search 搜索参数
+    private encodeParams(params: ProductSearchParams): URLSearchParams {
+
+        // 这个函数有问题，不知道为什么sum没有值
+        return Object.keys(params)
+            .filter(key => params[key])
+            .reduce((sum: URLSearchParams, key: string) => {
+
+                sum.append(key, params[key]);
+
+                return sum;
+            }, new URLSearchParams());
+    }
+
+    // 返回正确的 search 搜索参数
+    private encodeParams2(params: ProductSearchParams): string {
+
+        const keyArr: Array<string> = Object.keys(params)
+                                .filter(key => params[key]);
+        let str: string[] = [];
+        let str2: string  = '';
+        for (let i = 0; i < keyArr.length; i++) {
+            str[i] = (keyArr[i] + '=' + params[keyArr[i]]);
+        }
+
+        // 可以用 encodeURI() 把字符串进行 URI 编码
+        str2 = '?' + str.join('&');
+
+        // console.log(str2);
+
+        return str2;
     }
 }
 
@@ -109,7 +102,14 @@ export class Comment {
     ) {}
 }
 
-
+// 获取产品搜索信息类
+export class ProductSearchParams {
+    constructor (
+        public title: string,       // 商品title
+        public price: number,       // 商品价格
+        public category: string     // 商品分类
+    ) {}
+}
 
 
 

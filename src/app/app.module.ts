@@ -14,6 +14,9 @@ import {RouterModule, Routes} from "@angular/router";
 import {ProductService} from "./shared/product.service";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { FilterPipe } from './pipe/filter.pipe';
+import {HttpModule} from "@angular/http";
+import {WebSocketService} from "./shared/web-socket.service";
+import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 
 
 const routeConfig: Routes = [
@@ -47,9 +50,13 @@ const routeConfig: Routes = [
       BrowserModule,
       FormsModule,
       ReactiveFormsModule,
-      RouterModule.forRoot(routeConfig)
+      RouterModule.forRoot(routeConfig),
+      HttpModule
   ],
-  providers: [ProductService],
+  providers: [ProductService, WebSocketService,
+    //  主要是放到服务器中，在其他路径刷新不显示问题
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
+      ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

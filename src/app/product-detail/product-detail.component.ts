@@ -1,6 +1,10 @@
+///<reference path="../../../node_modules/rxjs/Observable.d.ts"/>
 import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Product, ProductService, Comment} from '../shared/product.service'
+import 'rxjs/Rx';
+import {WebSocketService} from "../shared/web-socket.service";
+import {Subscription} from "rxjs/Subscription";
 
 // 星星默认显示个数
 const RATING_MAX: number = 5;
@@ -22,17 +26,34 @@ export class ProductDetailComponent implements OnInit {
     // 默认让评价框隐藏
     isCommentHidden: boolean = true;
 
+    // 关注标志
+    isWatched: boolean = false;
+    // 当前的价格
+    currentBid: number;
+    // 流定阅相关的返回值，可以用作取消关注定阅
+    subscription: Subscription;
+
     constructor(
         private routeInfo: ActivatedRoute,
-        private productService: ProductService
+        private productService: ProductService,
+        private wsService: WebSocketService
     ) { }
 
     ngOnInit() {
 
         const productId: number = this.routeInfo.snapshot.params['productId'];
 
-        this.product = this.productService.getProduct( productId );
-        this.comments = this.productService.getCommentsForProductId( productId );
+        this.productService.getProduct( productId ).subscribe(
+            product => {
+                this.product = product;
+
+                this.currentBid = product.price;
+            }
+        );
+
+        this.productService.getCommentsForProductId( productId ).subscribe(
+            (comments) => this.comments = comments
+        );
     }
 
 
@@ -56,6 +77,25 @@ export class ProductDetailComponent implements OnInit {
         this.newComment = null;
         this.newRating = RATING_MAX;
         this.isCommentHidden = true;
+    }
+
+    watchProduct() {
+        this.isWatched = !this.isWatched;
+
+        if ( this.isWatched ) {
+            this.subscription = this.wsService.createObservableSocket('ws://localhost:8086', this.product.id)
+                .subscribe(
+                    products => {
+
+                        const product = products.find( p => p.productId === this.product.id);
+                        this.currentBid = product.bid;
+                    }
+                );
+        } else {
+            this.subscription.unsubscribe();
+            this.subscription = null;
+        }
+
     }
 
 }
