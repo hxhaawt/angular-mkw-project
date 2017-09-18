@@ -1,4 +1,4 @@
-# Demo1
+# Demo1 --在线竞拍商城demo--要配合server-demo2一起用，server-demo2是用node做的服务器。
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.3.2.
 
