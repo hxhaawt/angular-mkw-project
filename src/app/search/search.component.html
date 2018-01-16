@@ -43,7 +43,8 @@
                     class="form-control"
                 >
                     <option value="-1">全部分类</option>
-                    <option *ngFor='let category of categories' [value]="category">
+                    <option *ngFor='let category of categories'
+                        [value]="category">
                         {{ category }}
                     </option>
                 </select>

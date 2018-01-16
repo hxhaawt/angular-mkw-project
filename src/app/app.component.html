@@ -1,17 +1,22 @@
 <!--The content below is only a placeholder and can be replaced.-->
+<!-- 固定在顶部的导航 -->
 <app-navbar></app-navbar>
 
+<!-- 中间主要内容 -->
 <div class="container">
     <div class="row">
         <div class="col-md-3">
+            <!-- 固定在内容左侧的搜索框 search -->
             <app-search></app-search>
         </div>
         <div class="col-md-9">
+            <!-- 右侧显示内容 home -->
             <router-outlet></router-outlet>
         </div>
     </div>
 </div>
 
+<!-- 固定在底部的信息显示 -->
 <app-footer></app-footer>
 
 

@@ -8,12 +8,12 @@ import { Component, Input, OnInit, OnChanges, Output, EventEmitter, SimpleChange
 export class StarsComponent implements OnInit, OnChanges {
 
     @Input()
-    private rating: number = 0;
+    public rating: number = 0;
     // 星星显示个数以及显示状态
     private stars: boolean [];
     // 星星默认是只读的，不能点击
     @Input()
-    private readonly: boolean = true;
+    public readonly: boolean = true;
 
     // 发射事件，让父级组件更新UI
     // ratingChange名字和rating对应，父级就可以这样用 [(rating)]='newRating'

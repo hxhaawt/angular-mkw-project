@@ -30,9 +30,6 @@ const routeConfig: Routes = [
     }
 ];
 
-
-
-
 @NgModule({
   declarations: [
     AppComponent,

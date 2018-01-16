@@ -79,6 +79,7 @@ export class ProductDetailComponent implements OnInit {
         this.isCommentHidden = true;
     }
 
+    // 关注商品
     watchProduct() {
         this.isWatched = !this.isWatched;
 
