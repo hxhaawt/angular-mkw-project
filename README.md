@@ -1,6 +1,15 @@
-# Demo1 --在线竞拍商城demo--要配合server-demo2一起用，server-demo2是用node做的服务器。
+# 用Angular4.xx做的在线竞拍商城demo
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.3.2.
+	这个demo要配合server-demo2一起用，server-demo2是用node做的服务器。
+
+## 网站图片
+首页
+![](https://i.imgur.com/SB4Y3Er.png)
+
+商品详情页
+![](https://i.imgur.com/aym7wdx.png)
+
+
 
 ## Development server
 
